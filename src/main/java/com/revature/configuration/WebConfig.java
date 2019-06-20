@@ -29,7 +29,8 @@ public class WebConfig implements WebMvcConfigurer {
         ObjectMapper mapper = new ObjectMapper();
         //Registering Hibernate5Module to support lazy objects
 //        mapper.registerModule(new Hibernate5Module());
-        SimpleFilterProvider depthFilters = new SimpleFilterProvider().addFilter("depth_1", new DeepFieldFilter(1))
+        SimpleFilterProvider depthFilters = new SimpleFilterProvider()
+        		.addFilter("depth_1", new DeepFieldFilter(1))
                 .addFilter("depth_2", new DeepFieldFilter(2))
                 .addFilter("depth_3", new DeepFieldFilter(3))
                 .addFilter("depth_4", new DeepFieldFilter(4))
@@ -51,7 +52,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**") // all endpoints in the api
             .allowedOrigins("http://localhost:4040", "http://localhost:3000") // allow this origin
             .allowedMethods("PUT", "DELETE", "GET", "OPTIONS", "POST", "PATCH")
-            .allowedHeaders("header1", "header2", "Authorization")
+            .allowedHeaders("content-type","header1", "header2", "Authorization")
 //            .exposedHeaders("header1", "header2")
             .allowCredentials(true);
 	}

@@ -22,23 +22,20 @@ public class PermissionServiceImpl implements PermissionService{
 	}
 
 	@Override
-	public List<Permission> findAll() {
-		// TODO Auto-generated method stub
-		List<Permission> allPermissions = permissionRepository.findAll();
-		if(allPermissions.isEmpty())
-			throw new ApiException(HttpStatus.NOT_FOUND, "No permissions found");
-		return allPermissions;
-	}
-
-	@Override
 	public Permission findById(Integer id) {
 		// TODO Auto-generated method stub
-		Optional<Permission> res = permissionRepository.findById(id);
-		if(res.isPresent()) {
-			return res.get();
+		Permission res = permissionRepository.findById(id).orElse(null);
+		if(res != null) {
+			return res;
 		} else {
 			throw new ApiException(HttpStatus.NOT_FOUND, "permission not found");
 		}
+	}
+	
+	@Override
+	public List<Permission> findByUserId(Integer id) {
+		// TODO Auto-generated method stub
+		return permissionRepository.findByUserId(id);
 	}
 
 	@Override
@@ -48,9 +45,9 @@ public class PermissionServiceImpl implements PermissionService{
 	}
 
 	@Override
-	public void delete(Permission permission) {
+	public void delete(Integer permissionId) {
 		// TODO Auto-generated method stub
-		permissionRepository.delete(permission);
+		permissionRepository.deleteById(permissionId);
 	}
 
 	@Override
@@ -62,19 +59,11 @@ public class PermissionServiceImpl implements PermissionService{
 		return permissions;
 	}
 
-	@Override
-	public List<Permission> findByUsername(String username) {
-		// TODO Auto-generated method stub
-		List<Permission> permissions = permissionRepository.findByUserUsername(username);
-		if(permissions.isEmpty())
-			throw new ApiException(HttpStatus.NOT_FOUND, "No permissions found");
-		return permissions;
-	}
 
 	@Override
-	public List<Permission> findByInventory(String inventory) {
+	public List<Permission> findByInventoryName(String inventoryName) {
 		// TODO Auto-generated method stub
-		List<Permission> permissions = permissionRepository.findByInventoryInventory(inventory);
+		List<Permission> permissions = permissionRepository.findByInventoryName(inventoryName);
 		if(permissions.isEmpty())
 			throw new ApiException(HttpStatus.NOT_FOUND, "No permissions found");
 		return permissions;

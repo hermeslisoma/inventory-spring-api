@@ -5,39 +5,62 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Table(name = "users")
 public class User {
-	
+	public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder(); 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
 	private String username;
-	
-	private String password;
-	
 	private String email;
-	
 	private String firstname;
-	
 	private String lastname;
 	
-	public User() {
+	@JsonIgnore
+	private String password;
+	
+	@Transient
+	@JsonIgnore
+	private String[] roles;
+	
+	@Transient
+	private String token;
+	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+	//roles not yet implemented always return new string Role User 
+	public String[] getRoles() {
+		return new String[] {"ROLE_USER"};
+	}
+	public void setRoles(String[] roles) {
+		this.roles = roles;
+	}
+	protected User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(String username, String password, String email, String firstname, String lastname) {
-		super();
+	public User( String username,String password, String email, String firstname, String lastname, 
+			String[] roles) {
+		this();
 		this.username = username;
-		this.password = password;
 		this.email = email;
 		this.firstname = firstname;
 		this.lastname = lastname;
+		setPassword(password);
+		this.roles = roles;
 	}
-
 	public int getId() {
 		return id;
 	}
@@ -59,7 +82,7 @@ public class User {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = PASSWORD_ENCODER.encode(password);
 	}
 
 	public String getEmail() {

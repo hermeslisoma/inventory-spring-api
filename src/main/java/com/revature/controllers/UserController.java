@@ -18,7 +18,7 @@ import com.revature.models.User;
 import com.revature.services.UserService;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("api/users")
 public class UserController {
 	
 	private UserService userService;
@@ -51,16 +51,16 @@ public class UserController {
 	
 	@PostMapping
 	public User save(@Valid @RequestBody User user) {
-		return userService.saveUser(user);
+		return userService.save(user);
 	}
 	
 	@PatchMapping
 	public User updateUser(@Valid @RequestBody User user) {
-		return userService.saveUser(user);
+		return userService.save(user);
 	}
 	
-	@DeleteMapping
-	public void delete(@Valid @RequestBody User user) {
-		userService.delete(user);
+	@DeleteMapping("{userId}")
+	public void delete(@PathVariable Integer userId) {
+		userService.delete(userId);
 	}
 }
